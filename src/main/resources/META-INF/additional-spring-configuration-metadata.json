@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "kiszel.daniel.app.jwtSecret",
+      "type": "java.lang.String",
+      "description": "Description for kiszel.daniel.app.jwtSecret."
+  }
+] }
