@@ -2,6 +2,7 @@ package kiszel.daniel.temalabor.payload.request;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class SignupRequest {
@@ -17,8 +18,10 @@ public class SignupRequest {
     @NotBlank
     @Size(min = 6, max = 40)
     private String password;
-
+    @NotNull
     private boolean role;
+
+    private String name;
 
     public String getUsername() {
         return username;
@@ -50,5 +53,13 @@ public class SignupRequest {
 
     public void setRole(boolean role) {
         this.role = role;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

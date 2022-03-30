@@ -12,6 +12,7 @@ import kiszel.daniel.temalabor.repository.RoleRepository;
 import kiszel.daniel.temalabor.repository.UserRepository;
 import kiszel.daniel.temalabor.security.jwt.JwtUtils;
 import kiszel.daniel.temalabor.security.services.UserDetailsImpl;
+import net.minidev.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +64,15 @@ public class AuthController {
 				roles));
 	}
 	@PostMapping("/signup")
-	public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+	public ResponseEntity<?> registerUser(@Valid @RequestBody JSONObject param) {
+		JSONObject params = new JSONObject(param);
+		SignupRequest signUpRequest = new SignupRequest();
+		signUpRequest.setEmail((String) params.get("email"));
+		signUpRequest.setUsername((String) params.get("username"));
+		signUpRequest.setPassword((String) params.get("password"));
+		signUpRequest.setPassword((String) params.get("name"));
+		signUpRequest.setRole(Boolean.parseBoolean(String.valueOf(params.get("isStudent"))));
+
 		if (userRepository.existsByUsername(signUpRequest.getUsername())) {
 			return ResponseEntity
 					.badRequest()
@@ -78,13 +87,12 @@ public class AuthController {
 		// Create new user's account
 		User user = new User(signUpRequest.getUsername(),
 							 signUpRequest.getEmail(),
-							 encoder.encode(signUpRequest.getPassword()));
+							 encoder.encode(signUpRequest.getPassword()),
+							 signUpRequest.getName());
 
-		boolean blRoles = signUpRequest.getRole();
 		Set<Role> roles = new HashSet<>();
-		logger.trace(String.valueOf(blRoles));
 
-		if (blRoles) {
+		if (signUpRequest.getRole()) {
 			Role studentRole = roleRepository.findByName(ERole.ROLE_STUDENT)
 					.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
 			roles.add(studentRole);
