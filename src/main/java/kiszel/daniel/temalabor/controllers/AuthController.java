@@ -60,6 +60,7 @@ public class AuthController {
 		return ResponseEntity.ok(new JwtResponse(jwt,
 				userDetails.getId(),
 				userDetails.getUsername(),
+				userDetails.getName(),
 				userDetails.getEmail(),
 				roles));
 	}
@@ -70,7 +71,7 @@ public class AuthController {
 		signUpRequest.setEmail((String) params.get("email"));
 		signUpRequest.setUsername((String) params.get("username"));
 		signUpRequest.setPassword((String) params.get("password"));
-		signUpRequest.setPassword((String) params.get("name"));
+		signUpRequest.setName((String) params.get("name"));
 		signUpRequest.setRole(Boolean.parseBoolean(String.valueOf(params.get("isStudent"))));
 
 		if (userRepository.existsByUsername(signUpRequest.getUsername())) {
