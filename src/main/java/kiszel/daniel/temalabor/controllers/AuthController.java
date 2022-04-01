@@ -45,6 +45,10 @@ public class AuthController {
 	PasswordEncoder encoder;
 	@Autowired
 	JwtUtils jwtUtils;
+	@PostMapping("/add_news")
+	public ResponseEntity<?> addNews(@Valid @RequestBody JSONObject param){
+
+	}
 
 	@PostMapping("/signin")
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -79,6 +83,7 @@ public class AuthController {
 					.badRequest()
 					.body(new MessageResponse("Error: Username is already taken!"));
 		}
+
 		if (userRepository.existsByEmail(signUpRequest.getEmail())) {
 			return ResponseEntity
 					.badRequest()
