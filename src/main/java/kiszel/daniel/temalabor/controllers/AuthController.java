@@ -2,16 +2,19 @@ package kiszel.daniel.temalabor.controllers;
 
 
 import kiszel.daniel.temalabor.models.ERole;
+import kiszel.daniel.temalabor.models.News;
 import kiszel.daniel.temalabor.models.Role;
 import kiszel.daniel.temalabor.models.User;
 import kiszel.daniel.temalabor.payload.request.LoginRequest;
 import kiszel.daniel.temalabor.payload.request.SignupRequest;
 import kiszel.daniel.temalabor.payload.response.JwtResponse;
 import kiszel.daniel.temalabor.payload.response.MessageResponse;
+import kiszel.daniel.temalabor.repository.NewsRepository;
 import kiszel.daniel.temalabor.repository.RoleRepository;
 import kiszel.daniel.temalabor.repository.UserRepository;
 import kiszel.daniel.temalabor.security.jwt.JwtUtils;
 import kiszel.daniel.temalabor.security.services.UserDetailsImpl;
+import net.minidev.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +27,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -43,7 +47,19 @@ public class AuthController {
 	@Autowired
 	PasswordEncoder encoder;
 	@Autowired
+	NewsRepository newsRepository;
+	@Autowired
 	JwtUtils jwtUtils;
+	@PostMapping("/add_news")
+	public ResponseEntity<?> addNews(@Valid @RequestBody JSONObject param){
+		JSONObject params = new JSONObject(param);
+		News news = new News();
+		news.setUser_id(Long.parseLong(String.valueOf(params.get("user_id"))));
+		news.setText((String) params.get("text"));
+		news.setCreated(LocalDate.now());
+		newsRepository.save(news);
+		return ResponseEntity.ok(new MessageResponse("News created successfully!"));
+	}
 
 	@PostMapping("/signin")
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -59,16 +75,27 @@ public class AuthController {
 		return ResponseEntity.ok(new JwtResponse(jwt,
 				userDetails.getId(),
 				userDetails.getUsername(),
+				userDetails.getName(),
 				userDetails.getEmail(),
 				roles));
 	}
+
 	@PostMapping("/signup")
-	public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+	public ResponseEntity<?> registerUser(@Valid @RequestBody JSONObject param) {
+		JSONObject params = new JSONObject(param);
+		SignupRequest signUpRequest = new SignupRequest();
+		signUpRequest.setEmail((String) params.get("email"));
+		signUpRequest.setUsername((String) params.get("username"));
+		signUpRequest.setPassword((String) params.get("password"));
+		signUpRequest.setName((String) params.get("name"));
+		signUpRequest.setRole(Boolean.parseBoolean(String.valueOf(params.get("isStudent"))));
+
 		if (userRepository.existsByUsername(signUpRequest.getUsername())) {
 			return ResponseEntity
 					.badRequest()
 					.body(new MessageResponse("Error: Username is already taken!"));
 		}
+
 		if (userRepository.existsByEmail(signUpRequest.getEmail())) {
 			return ResponseEntity
 					.badRequest()
@@ -78,13 +105,12 @@ public class AuthController {
 		// Create new user's account
 		User user = new User(signUpRequest.getUsername(),
 							 signUpRequest.getEmail(),
-							 encoder.encode(signUpRequest.getPassword()));
+							 encoder.encode(signUpRequest.getPassword()),
+							 signUpRequest.getName());
 
-		boolean blRoles = signUpRequest.getRole();
 		Set<Role> roles = new HashSet<>();
-		logger.trace(String.valueOf(blRoles));
 
-		if (blRoles) {
+		if (signUpRequest.getRole()) {
 			Role studentRole = roleRepository.findByName(ERole.ROLE_STUDENT)
 					.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
 			roles.add(studentRole);
