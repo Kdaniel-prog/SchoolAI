@@ -13,12 +13,12 @@ public class NewsService {
     private NewsRepository newsRepository;
 
     public List<News> getNews(){
-        return newsRepository.findAll();
+        return newsRepository.findAllByOrderByCreatedAsc();
     }
     public void addNews(News news){
         newsRepository.save(news);
     }
-    public void updateNews(News news){
+    public void editNews(News news){
         newsRepository.save(news);
     }
     public void deleteNews(Long id){
