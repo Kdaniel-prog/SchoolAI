@@ -27,7 +27,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -56,7 +56,7 @@ public class AuthController {
 		News news = new News();
 		news.setUser_id(Long.parseLong(String.valueOf(params.get("user_id"))));
 		news.setText((String) params.get("text"));
-		news.setCreated(LocalDate.now());
+		news.setCreated(LocalDateTime.now());
 		newsRepository.save(news);
 		return ResponseEntity.ok(new MessageResponse("News created successfully!"));
 	}
