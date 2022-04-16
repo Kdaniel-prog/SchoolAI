@@ -57,6 +57,7 @@ public class AuthController {
 		news.setUser_id(Long.parseLong(String.valueOf(params.get("user_id"))));
 		news.setText((String) params.get("text"));
 		news.setCreated(LocalDateTime.now());
+		news.setUser_name((String) params.get("user_name"));
 		newsRepository.save(news);
 		return ResponseEntity.ok(new MessageResponse("News created successfully!"));
 	}
