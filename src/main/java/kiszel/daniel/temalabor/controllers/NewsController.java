@@ -19,15 +19,15 @@ public class NewsController {
         return service.getNews();
     }
     @PostMapping("/news/addnew")
-    public void addApartment(@RequestBody News news){
+    public void addNew(@RequestBody News news){
         service.addNews(news);
     }
     @PutMapping("/news/{id}/edit")
-    public void updateApartment(@PathVariable("id") Long id, @RequestBody News news){
-        service.updateNews(news);
+    public void editNews(@PathVariable("id") Long id, @RequestBody News news){
+        service.editNews(news);
     }
     @DeleteMapping("/news/{id}/delete")
-    public void deleteApartment(@PathVariable("id") Long id){
+    public void deleteNew(@PathVariable("id") Long id){
         service.deleteNews(id);
     }
 
