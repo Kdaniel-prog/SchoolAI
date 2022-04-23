@@ -2,7 +2,7 @@ package kiszel.daniel.temalabor.models;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(	name = "news")
@@ -13,14 +13,16 @@ public class News {
     private Long user_id;
     @NotBlank
     private String text;
-    private LocalDate created;
+    private LocalDateTime created;
+    private String user_name;
     public News(){
     }
 
-    public News(Long user_id, String text, LocalDate created){
+    public News(Long user_id, String text, LocalDateTime created, String user_name){
         this.user_id = user_id;
         this.text = text;
         this.created = created;
+        this.user_name = user_name;
     }
 
     public Long getId() {
@@ -47,11 +49,19 @@ public class News {
         this.text = text;
     }
 
-    public LocalDate getCreated() {
+    public LocalDateTime getCreated() {
         return created;
     }
 
-    public void setCreated(LocalDate created) {
+    public void setCreated(LocalDateTime created) {
         this.created = created;
+    }
+
+    public String getUser_name() {
+        return user_name;
+    }
+
+    public void setUser_name(String user_name) {
+        this.user_name = user_name;
     }
 }

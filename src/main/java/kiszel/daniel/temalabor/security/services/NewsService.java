@@ -13,7 +13,7 @@ public class NewsService {
     private NewsRepository newsRepository;
 
     public List<News> getNews(){
-        return newsRepository.findAllByOrderByCreatedAsc();
+        return newsRepository.findAllByOrderByCreatedDesc();
     }
     public void addNews(News news){
         newsRepository.save(news);
