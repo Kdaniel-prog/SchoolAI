@@ -2,14 +2,12 @@ package kiszel.daniel.temalabor.controllers;
 
 
 import kiszel.daniel.temalabor.models.ERole;
-import kiszel.daniel.temalabor.models.News;
 import kiszel.daniel.temalabor.models.Role;
 import kiszel.daniel.temalabor.models.User;
 import kiszel.daniel.temalabor.payload.request.LoginRequest;
 import kiszel.daniel.temalabor.payload.request.SignupRequest;
 import kiszel.daniel.temalabor.payload.response.JwtResponse;
 import kiszel.daniel.temalabor.payload.response.MessageResponse;
-import kiszel.daniel.temalabor.repository.NewsRepository;
 import kiszel.daniel.temalabor.repository.RoleRepository;
 import kiszel.daniel.temalabor.repository.UserRepository;
 import kiszel.daniel.temalabor.security.jwt.JwtUtils;
@@ -27,7 +25,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -46,21 +43,10 @@ public class AuthController {
 	RoleRepository roleRepository;
 	@Autowired
 	PasswordEncoder encoder;
-	@Autowired
-	NewsRepository newsRepository;
+
 	@Autowired
 	JwtUtils jwtUtils;
-	@PostMapping("/add_news")
-	public ResponseEntity<?> addNews(@Valid @RequestBody JSONObject param){
-		JSONObject params = new JSONObject(param);
-		News news = new News();
-		news.setUser_id(Long.parseLong(String.valueOf(params.get("user_id"))));
-		news.setText((String) params.get("text"));
-		news.setCreated(LocalDateTime.now());
-		news.setUser_name((String) params.get("user_name"));
-		newsRepository.save(news);
-		return ResponseEntity.ok(new MessageResponse("News created successfully!"));
-	}
+
 
 	@PostMapping("/signin")
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
