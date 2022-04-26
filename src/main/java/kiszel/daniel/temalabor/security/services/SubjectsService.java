@@ -15,11 +15,6 @@ public class SubjectsService {
     public List<Subjects> getSubjects(){
         return subjectsRepository.findAllByOrderBySubjectDesc();
     }
-
-    public void addSubjects(Subjects subjects){
-        subjectsRepository.save(subjects);
-    }
-
     public void editSubjects(Subjects subjects){
         subjectsRepository.save(subjects);
     }

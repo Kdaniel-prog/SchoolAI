@@ -24,6 +24,11 @@ public class GradesController {
         return service.getStudents();
     }
 
+    @GetMapping("/grades/{id}/current_student_grade")
+    public List<GradeDTO> CurrentStudentGrade(@PathVariable("id") Long id){
+        return service.getCurrentStudentGrade(id);
+    }
+
     @GetMapping("/grades")
     public List<GradeDTO> getGrades(){
         return service.getAllGrade();

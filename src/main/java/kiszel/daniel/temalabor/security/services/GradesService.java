@@ -29,9 +29,11 @@ public class GradesService {
     @Autowired
     private SubjectsRepository subjectsRepository;
 
-
     public List<GradeDTO> getAllGrade() {
         return gradesDTO.getAllGradeDTO();
+    }
+    public List<GradeDTO> getCurrentStudentGrade(Long id){
+        return gradesDTO.getCurrentUserGrade(id);
     }
 
     public List<User> getStudents(){
@@ -62,6 +64,7 @@ public class GradesService {
         gradesRepository.save(grades);
         return ResponseEntity.ok(new MessageResponse("News created successfully!"));
     }
+
     public void editGrades(JSONObject param, Long id){
         JSONObject params = new JSONObject(param);
         Grades grades = new Grades();
@@ -75,12 +78,10 @@ public class GradesService {
         grades.setUser(user);
 
         gradesRepository.save(grades);
-
     }
 
     public void deleteGrades(Long id){
         gradesRepository.deleteById(id);
     }
-
 
 }

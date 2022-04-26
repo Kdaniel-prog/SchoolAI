@@ -56,6 +56,11 @@ public class AuthController {
 		String jwt = jwtUtils.generateJwtToken(authentication);
 
 		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+		if (userRepository == null) {
+			return ResponseEntity
+					.badRequest()
+					.body(new MessageResponse("Error: Username is already taken!"));
+		}
 		List<String> roles = userDetails.getAuthorities().stream()
 				.map(item -> item.getAuthority())
 				.collect(Collectors.toList());
@@ -65,6 +70,7 @@ public class AuthController {
 				userDetails.getName(),
 				userDetails.getEmail(),
 				roles));
+
 	}
 
 	@PostMapping("/signup")

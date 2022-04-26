@@ -39,4 +39,25 @@ public class GradesDTO {
 
         return gradeDTOList;
     }
+
+    public List<GradeDTO> getCurrentUserGrade(Long id){
+        List<Grades> gradesList= gradesRepository.findAll();
+        ArrayList<GradeDTO> gradeDTOList = new ArrayList<>();
+        for (Grades grade: gradesList) {
+            User user = userRepository.findByUser(grade.getUser());
+            String user_name = user.getName();
+            if(user.getId() == id){
+                Long g_id = grade.getId();
+
+                Subjects subjects = subjectsRepository.findBySubject(grade.getSubjects());
+                String subject_name = subjects.getSubject();
+
+                GradeDTO gradeDto = new GradeDTO(g_id, user_name, subject_name, grade.getGrade());
+                gradeDTOList.add(gradeDto);
+            }else{
+                continue;
+            }
+        }
+        return gradeDTOList;
+    }
 }
