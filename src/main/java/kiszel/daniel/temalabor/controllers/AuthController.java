@@ -13,8 +13,6 @@ import kiszel.daniel.temalabor.repository.UserRepository;
 import kiszel.daniel.temalabor.security.jwt.JwtUtils;
 import kiszel.daniel.temalabor.security.services.UserDetailsImpl;
 import net.minidev.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -34,7 +32,6 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
-	Logger logger = LoggerFactory.getLogger(AuthController.class);
 	@Autowired
 	AuthenticationManager authenticationManager;
 	@Autowired
@@ -76,13 +73,17 @@ public class AuthController {
 	@PostMapping("/signup")
 	public ResponseEntity<?> registerUser(@Valid @RequestBody JSONObject param) {
 		JSONObject params = new JSONObject(param);
+		if (String.valueOf(params.get("isStudent")) == null) {
+			return ResponseEntity
+					.badRequest()
+					.body(new MessageResponse("Error: Role not selected!"));
+		}
 		SignupRequest signUpRequest = new SignupRequest();
 		signUpRequest.setEmail((String) params.get("email"));
 		signUpRequest.setUsername((String) params.get("username"));
 		signUpRequest.setPassword((String) params.get("password"));
 		signUpRequest.setName((String) params.get("name"));
 		signUpRequest.setRole(Boolean.parseBoolean(String.valueOf(params.get("isStudent"))));
-
 		if (userRepository.existsByUsername(signUpRequest.getUsername())) {
 			return ResponseEntity
 					.badRequest()
@@ -94,6 +95,8 @@ public class AuthController {
 					.badRequest()
 					.body(new MessageResponse("Error: Email is already in use!"));
 		}
+
+
 
 		// Create new user's account
 		User user = new User(signUpRequest.getUsername(),
