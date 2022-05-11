@@ -1,6 +1,6 @@
 package kiszel.daniel.temalabor.controllers;
 
-import kiszel.daniel.temalabor.models.GradeDTO;
+import kiszel.daniel.temalabor.DTO.GradeDTO;
 import kiszel.daniel.temalabor.models.User;
 import kiszel.daniel.temalabor.security.services.GradesService;
 import net.minidev.json.JSONObject;

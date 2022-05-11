@@ -1,4 +1,4 @@
-package kiszel.daniel.temalabor.models;
+package kiszel.daniel.temalabor.DTO;
 
 public class GradeDTO {
     private Long id;

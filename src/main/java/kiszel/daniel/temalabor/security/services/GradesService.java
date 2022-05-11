@@ -1,5 +1,6 @@
 package kiszel.daniel.temalabor.security.services;
 
+import kiszel.daniel.temalabor.DTO.GradeDTO;
 import kiszel.daniel.temalabor.DTO.GradesDTO;
 import kiszel.daniel.temalabor.models.*;
 import kiszel.daniel.temalabor.payload.response.MessageResponse;
